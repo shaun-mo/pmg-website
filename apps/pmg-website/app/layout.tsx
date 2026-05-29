@@ -1,8 +1,8 @@
 import { JetBrains_Mono, Geist } from "next/font/google"
 
-import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils"
+import "@workspace/ui/globals.css"
+import { ThemeProvider } from "@workspace/ui/components/theme-provider"
+import { cn } from "@workspace/ui/lib/utils"
 import { SiteHeader } from "@/components/layout/site-header"
 import { SiteFooter } from "@/components/layout/site-footer"
 import { ContactPanelProvider } from "@/components/contact-panel/contact-panel-provider"

@@ -3,10 +3,10 @@
 import * as React from "react"
 import { ArrowRight, Check } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@workspace/ui/components/button"
+import { Input } from "@workspace/ui/components/input"
+import { Label } from "@workspace/ui/components/label"
+import { Textarea } from "@workspace/ui/components/textarea"
 import { offices } from "@/lib/placeholder-data"
 
 export function ContactForm({ onSuccess }: { onSuccess?: () => void }) {

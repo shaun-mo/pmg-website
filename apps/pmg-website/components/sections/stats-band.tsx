@@ -1,6 +1,6 @@
 import { ArrowUpRight } from "lucide-react"
 
-import { Eyebrow } from "@/components/ui/eyebrow"
+import { Eyebrow } from "@workspace/ui/components/eyebrow"
 import { stats as defaultStats } from "@/lib/placeholder-data"
 
 export type StatItem = {

@@ -8,7 +8,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet"
+} from "@workspace/ui/components/sheet"
 import { ContactForm } from "@/components/contact-panel/contact-form"
 import { useContactPanel } from "@/components/contact-panel/contact-panel-provider"
 

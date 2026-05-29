@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 
-import { ArrowPin } from "@/components/ui/arrow-pin"
+import { ArrowPin } from "@workspace/ui/components/arrow-pin"
 import type { Service } from "@/lib/placeholder-data"
 
 export function ServiceCard({ service }: { service: Service }) {

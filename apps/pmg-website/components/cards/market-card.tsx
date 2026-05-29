@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 
-import { ArrowPin } from "@/components/ui/arrow-pin"
+import { ArrowPin } from "@workspace/ui/components/arrow-pin"
 import type { Market } from "@/lib/placeholder-data"
 
 export function MarketCard({ market }: { market: Market }) {

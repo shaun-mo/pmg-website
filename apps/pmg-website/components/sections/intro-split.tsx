@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import { Eyebrow } from "@/components/ui/eyebrow"
+import { Button } from "@workspace/ui/components/button"
+import { Eyebrow } from "@workspace/ui/components/eyebrow"
 
 export type IntroSplitProps = {
   eyebrow?: string

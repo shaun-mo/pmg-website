@@ -1,4 +1,4 @@
-import { Eyebrow } from "@/components/ui/eyebrow"
+import { Eyebrow } from "@workspace/ui/components/eyebrow"
 
 export type NumberedItem = {
   title: string

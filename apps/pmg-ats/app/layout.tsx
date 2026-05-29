@@ -1,7 +1,7 @@
 import { Geist, JetBrains_Mono } from "next/font/google"
 
-import "./globals.css"
-import { cn } from "@/lib/utils"
+import "@workspace/ui/globals.css"
+import { cn } from "@workspace/ui/lib/utils"
 import { AtsHeader } from "@/components/layout/ats-header"
 import { AtsFooter } from "@/components/layout/ats-footer"
 

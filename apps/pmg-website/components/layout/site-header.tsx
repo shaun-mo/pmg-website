@@ -5,21 +5,21 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Menu, Search } from "lucide-react"
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@workspace/ui/lib/utils"
+import { Button } from "@workspace/ui/components/button"
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
+} from "@workspace/ui/components/sheet"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@workspace/ui/components/accordion"
 import { useContactPanel } from "@/components/contact-panel/contact-panel-provider"
 import { markets, services } from "@/lib/placeholder-data"
 

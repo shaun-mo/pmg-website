@@ -2,9 +2,9 @@
 
 import { ArrowRight } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@workspace/ui/components/button"
 import { useContactPanel } from "@/components/contact-panel/contact-panel-provider"
-import { cn } from "@/lib/utils"
+import { cn } from "@workspace/ui/lib/utils"
 
 export function ContactCtaButton({
   label = "Start a conversation",
