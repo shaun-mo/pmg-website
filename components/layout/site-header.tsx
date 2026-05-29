@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Menu, X, ChevronDown } from "lucide-react"
+import { ArrowRight, Menu, Search } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -20,15 +20,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { useHeaderScrollState } from "@/hooks/use-header-scroll-state"
 import { useContactPanel } from "@/components/contact-panel/contact-panel-provider"
-import { primaryNavItems } from "@/lib/nav/primary-nav-items"
 import { markets, services } from "@/lib/placeholder-data"
 
 type MegaKind = "markets" | "services" | null
 
+const subNavItems = [
+  { label: "Trusted Clients & Partners", href: "/about-us" },
+  { label: "Selected Work", href: "/projects" },
+  { label: "Markets We Serve", href: "/markets" },
+  { label: "How We Work", href: "/about-us" },
+]
+
 export function SiteHeader() {
-  const { atTop, scrollingDown } = useHeaderScrollState()
   const [openMega, setOpenMega] = React.useState<MegaKind>(null)
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -43,115 +47,161 @@ export function SiteHeader() {
     closeTimer.current = setTimeout(() => setOpenMega(null), 150)
   }
 
-  const isSolid = !atTop || openMega !== null || mobileOpen
-  const shouldHide = !atTop && scrollingDown && openMega === null && !mobileOpen
-  const useDarkText = isSolid
-
   return (
-    <header
-      className={cn(
-        "fixed top-0 right-0 left-0 z-40 transition-[background-color,box-shadow,transform] duration-200 ease-out",
-        isSolid
-          ? "bg-background shadow-[0_2px_12px_-6px_rgba(15,23,42,0.15)]"
-          : "bg-transparent",
-        shouldHide ? "-translate-y-full" : "translate-y-0",
-      )}
-    >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:h-24 lg:px-8">
-        <Logo light={!useDarkText} />
+    <header className="sticky top-0 z-40 border-b border-border bg-background">
+      {/* Mobile (< md): logo + hamburger */}
+      <div className="flex h-16 items-center justify-between px-4 md:hidden">
+        <Link
+          href="/"
+          aria-label="PMG United — home"
+          className="inline-flex items-center"
+        >
+          <Image
+            src="/logos/pmg-logo-primary.svg"
+            alt="PMG United"
+            width={171}
+            height={70}
+            priority
+            className="h-8 w-auto brightness-0"
+          />
+        </Link>
+        <MobileMenu
+          open={mobileOpen}
+          onOpenChange={setMobileOpen}
+          onOpenContact={() => {
+            setMobileOpen(false)
+            setContactOpen(true)
+          }}
+        />
+      </div>
 
-        <nav className="hidden flex-1 items-center justify-center gap-2 md:flex">
-          {primaryNavItems.map((item) => {
-            if (item.kind === "mega-markets" || item.kind === "mega-services") {
-              const kind = item.kind === "mega-markets" ? "markets" : "services"
-              const isOpen = openMega === kind
-              return (
+      {/* Desktop (md+): two-row layout with logo column */}
+      <div className="hidden h-28 md:flex">
+        {/* Logo column */}
+        <Link
+          href="/"
+          aria-label="PMG United — home"
+          className="flex shrink-0 items-center justify-center border-r border-border px-5 transition-opacity hover:opacity-90"
+        >
+          <Image
+            src="/logos/pmg-logo-primary.svg"
+            alt="PMG United"
+            width={171}
+            height={70}
+            priority
+            className="h-14 w-auto brightness-0"
+          />
+        </Link>
+
+        {/* Right side: stacked rows */}
+        <div className="flex min-w-0 flex-1 flex-col">
+          {/* Top row — blue band */}
+          <div className="flex h-14 bg-blue-700 text-white">
+            {/* Left primary nav */}
+            <ul className="flex divide-x divide-white/30">
+              <li>
                 <button
-                  key={item.label}
                   type="button"
-                  className={cn(
-                    "group relative flex h-12 items-center gap-1.5 px-4 text-[17px] font-medium tracking-tight transition-colors",
-                    useDarkText ? "text-foreground" : "text-white",
-                    "hover:text-action",
-                  )}
-                  onMouseEnter={() => openMenu(kind)}
+                  className="flex h-14 w-28 items-center justify-center text-base font-semibold transition-colors hover:bg-blue-800"
+                  onMouseEnter={() => openMenu("markets")}
                   onMouseLeave={scheduleClose}
-                  onFocus={() => openMenu(kind)}
+                  onFocus={() => openMenu("markets")}
                   onBlur={scheduleClose}
-                  aria-expanded={isOpen}
-                  aria-controls={`mega-${kind}`}
+                  aria-expanded={openMega === "markets"}
+                  aria-controls="mega-markets"
                 >
-                  {item.label}
-                  <ChevronDown
-                    className={cn(
-                      "h-4 w-4 transition-transform",
-                      isOpen && "rotate-180",
-                    )}
-                  />
-                  <span
-                    className={cn(
-                      "absolute right-4 bottom-2 left-4 h-px bg-action transition-transform duration-200",
-                      isOpen ? "scale-x-100" : "scale-x-0",
-                      "group-hover:scale-x-100",
-                    )}
-                  />
+                  Markets
                 </button>
-              )
-            }
-            if (item.kind === "contact-trigger") {
-              return (
+              </li>
+              <li>
                 <button
-                  key={item.label}
+                  type="button"
+                  className="flex h-14 w-28 items-center justify-center text-base font-semibold transition-colors hover:bg-blue-800"
+                  onMouseEnter={() => openMenu("services")}
+                  onMouseLeave={scheduleClose}
+                  onFocus={() => openMenu("services")}
+                  onBlur={scheduleClose}
+                  aria-expanded={openMega === "services"}
+                  aria-controls="mega-services"
+                >
+                  Services
+                </button>
+              </li>
+              <li>
+                <Link
+                  href="/projects"
+                  className="flex h-14 w-28 items-center justify-center text-base font-semibold transition-colors hover:bg-blue-800"
+                >
+                  Projects
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about-us"
+                  className="flex h-14 w-28 items-center justify-center text-base font-semibold transition-colors hover:bg-blue-800"
+                >
+                  About Us
+                </Link>
+              </li>
+            </ul>
+
+            {/* Spacer */}
+            <div className="flex-1" />
+
+            {/* Right utility nav */}
+            <ul className="flex divide-x divide-white/30 border-l border-white/30">
+              <li>
+                <button
+                  type="button"
+                  aria-label="Search"
+                  className="flex h-14 items-center justify-center px-5 transition-colors hover:bg-blue-800"
+                >
+                  <Search className="h-5 w-5" />
+                </button>
+              </li>
+              <li>
+                <Link
+                  href="/login"
+                  className="flex h-14 w-28 items-center justify-center text-base font-semibold transition-colors hover:bg-blue-800"
+                >
+                  Login
+                </Link>
+              </li>
+              <li>
+                <button
                   type="button"
                   onClick={() => setContactOpen(true)}
-                  className={cn(
-                    "group relative flex h-12 items-center px-4 text-[17px] font-medium tracking-tight transition-colors",
-                    useDarkText ? "text-foreground" : "text-white",
-                    "hover:text-action",
-                  )}
+                  className="flex h-14 w-28 items-center justify-center text-base font-semibold transition-colors hover:bg-blue-800"
                 >
-                  {item.label}
-                  <span className="absolute right-4 bottom-2 left-4 h-px scale-x-0 bg-action transition-transform duration-200 group-hover:scale-x-100" />
+                  Contact
                 </button>
-              )
-            }
-            return (
-              <Link
-                key={item.label}
-                href={item.href ?? "#"}
-                className={cn(
-                  "group relative flex h-12 items-center px-4 text-[17px] font-medium tracking-tight transition-colors",
-                  useDarkText ? "text-foreground" : "text-white",
-                  "hover:text-action",
-                )}
-              >
-                {item.label}
-                <span className="absolute right-4 bottom-2 left-4 h-px scale-x-0 bg-action transition-transform duration-200 group-hover:scale-x-100" />
-              </Link>
-            )
-          })}
-        </nav>
+              </li>
+              <li>
+                <Link
+                  href="/careers"
+                  className="flex h-14 w-28 items-center justify-center bg-action text-base font-semibold text-action-foreground transition-colors hover:bg-action-dark"
+                >
+                  Careers
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            asChild
-            className="group hidden h-12 gap-2 bg-action px-5 text-[15px] text-action-foreground hover:bg-action-dark md:inline-flex"
-          >
-            <Link href="/careers">
-              Careers
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </Button>
-
-          <MobileMenu
-            open={mobileOpen}
-            onOpenChange={setMobileOpen}
-            light={!useDarkText}
-            onOpenContact={() => {
-              setMobileOpen(false)
-              setContactOpen(true)
-            }}
-          />
+          {/* Bottom row — sub-nav */}
+          <div className="flex h-14 bg-background">
+            <ul className="flex divide-x divide-border">
+              {subNavItems.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="flex h-14 items-center justify-center px-4 text-base font-medium text-foreground transition-colors hover:bg-muted/50"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -161,32 +211,6 @@ export function SiteHeader() {
         onMouseLeave={scheduleClose}
       />
     </header>
-  )
-}
-
-function Logo({ light }: { light: boolean }) {
-  return (
-    <Link
-      href="/"
-      className="flex items-baseline gap-2 transition-opacity hover:opacity-80"
-    >
-      <span
-        className={cn(
-          "text-xl font-bold tracking-tight",
-          light ? "text-white" : "text-primary",
-        )}
-      >
-        PMG
-      </span>
-      <span
-        className={cn(
-          "text-base font-medium tracking-[0.2em]",
-          light ? "text-white/70" : "text-muted-foreground",
-        )}
-      >
-        UNITED
-      </span>
-    </Link>
   )
 }
 
@@ -210,7 +234,7 @@ function MegaMenu({
       id={`mega-${kind}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className="absolute top-full right-0 left-0 border-t border-border bg-background shadow-lg"
+      className="absolute top-full right-0 left-0 z-50 border-t border-border bg-background shadow-lg"
     >
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
@@ -263,12 +287,10 @@ function MegaMenu({
 function MobileMenu({
   open,
   onOpenChange,
-  light,
   onOpenContact,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  light: boolean
   onOpenContact: () => void
 }) {
   return (
@@ -277,10 +299,7 @@ function MobileMenu({
         <button
           type="button"
           aria-label="Open navigation menu"
-          className={cn(
-            "inline-flex h-10 w-10 items-center justify-center md:hidden",
-            light ? "text-white" : "text-foreground",
-          )}
+          className="inline-flex h-10 w-10 items-center justify-center text-foreground"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -290,11 +309,14 @@ function MobileMenu({
         className="w-full overflow-y-auto p-0 sm:max-w-md"
       >
         <SheetHeader className="border-b border-border px-6 py-4">
-          <SheetTitle className="text-left text-base font-semibold tracking-tight">
-            <span className="text-primary">PMG</span>{" "}
-            <span className="text-muted-foreground tracking-[0.2em]">
-              UNITED
-            </span>
+          <SheetTitle className="text-left">
+            <Image
+              src="/logos/pmg-logo-primary.svg"
+              alt="PMG United"
+              width={218}
+              height={73}
+              className="h-8 w-auto brightness-0"
+            />
           </SheetTitle>
         </SheetHeader>
         <div className="flex flex-col gap-1 px-2 py-4">
@@ -355,12 +377,19 @@ function MobileMenu({
           >
             About Us
           </Link>
+          <Link
+            href="/login"
+            onClick={() => onOpenChange(false)}
+            className="px-4 py-3 text-base font-medium text-foreground hover:text-action"
+          >
+            Login
+          </Link>
           <button
             type="button"
             onClick={onOpenContact}
             className="px-4 py-3 text-left text-base font-medium text-foreground hover:text-action"
           >
-            Contact Us
+            Contact
           </button>
 
           <div className="mt-4 px-4">

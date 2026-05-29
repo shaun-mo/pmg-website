@@ -43,6 +43,9 @@ sanity.cli.ts.bak
 # vercel
 .vercel
 
+# design tool handoff bundle (extracted from claude.ai/design — kept locally for reference)
+design-spec/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

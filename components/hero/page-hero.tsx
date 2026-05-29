@@ -6,33 +6,101 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 export type PageHeroProps = {
-  heading: string
+  heading?: string
+  /** Whole-heading accent (single-word parent pages like "Markets", "Services"). */
+  accent?: string
+  /** Highlight a single word inside `heading` with the accent treatment. */
+  accentWord?: string
   subheading?: string
   backgroundImage: string
-  alt: string
+  alt?: string
   primaryCta?: { label: string; href: string }
   secondaryCta?: { label: string; href: string }
   textColor?: "light" | "dark"
   showScrollCue?: boolean
+  /** Use a shorter hero (60vh) for listing pages. */
+  short?: boolean
+}
+
+function renderHeading({
+  heading,
+  accent,
+  accentWord,
+  isLight,
+}: {
+  heading?: string
+  accent?: string
+  accentWord?: string
+  isLight: boolean
+}) {
+  const accentClass = cn(
+    "italic",
+    isLight ? "text-action-light" : "text-action",
+  )
+  const accentStyle = { fontFamily: "Rockness, var(--font-sans)" }
+
+  if (accent) {
+    return (
+      <h1 className={cn("leading-[1.05]", isLight ? "text-white" : "text-primary")}>
+        <span className={accentClass} style={accentStyle}>
+          {accent}
+        </span>
+      </h1>
+    )
+  }
+  if (accentWord && heading) {
+    const idx = heading.toLowerCase().indexOf(accentWord.toLowerCase())
+    if (idx >= 0) {
+      const before = heading.slice(0, idx)
+      const word = heading.slice(idx, idx + accentWord.length)
+      const after = heading.slice(idx + accentWord.length)
+      return (
+        <h1
+          className={cn(
+            "leading-[1.05]",
+            isLight ? "text-white" : "text-primary",
+          )}
+        >
+          {before}
+          <span className={accentClass} style={accentStyle}>
+            {word}
+          </span>
+          {after}
+        </h1>
+      )
+    }
+  }
+  return (
+    <h1
+      className={cn("leading-[1.05]", isLight ? "text-white" : "text-primary")}
+    >
+      {heading}
+    </h1>
+  )
 }
 
 export function PageHero({
   heading,
+  accent,
+  accentWord,
   subheading,
   backgroundImage,
-  alt,
+  alt = "",
   primaryCta,
   secondaryCta,
   textColor = "light",
   showScrollCue = true,
+  short = false,
 }: PageHeroProps) {
   const isLight = textColor === "light"
 
   return (
     <section
       className={cn(
-        "relative isolate flex min-h-[90svh] items-end overflow-hidden md:min-h-[80vh] lg:min-h-screen",
-        "max-h-[900px]",
+        "relative isolate flex items-end overflow-hidden",
+        short
+          ? "min-h-[60vh] md:min-h-[60vh] lg:min-h-[60vh]"
+          : "min-h-[90svh] max-h-[900px] md:min-h-[80vh] lg:min-h-screen",
       )}
     >
       <Image
@@ -48,15 +116,8 @@ export function PageHero({
       )}
 
       <div className="mx-auto w-full max-w-7xl px-4 pt-32 pb-20 sm:px-6 lg:px-8 lg:pb-28">
-        <div className="max-w-3xl">
-          <h1
-            className={cn(
-              "text-4xl leading-[1.05] font-bold tracking-tight md:text-5xl lg:text-6xl xl:text-7xl",
-              isLight ? "text-white" : "text-primary",
-            )}
-          >
-            {heading}
-          </h1>
+        <div className="max-w-4xl">
+          {renderHeading({ heading, accent, accentWord, isLight })}
           {subheading ? (
             <p
               className={cn(

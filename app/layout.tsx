@@ -1,14 +1,14 @@
-import { Inter, JetBrains_Mono } from "next/font/google"
+import { JetBrains_Mono, Geist } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { SiteHeader } from "@/components/layout/site-header"
-import { Footer53 } from "@/components/footer53"
+import { SiteFooter } from "@/components/layout/site-footer"
 import { ContactPanelProvider } from "@/components/contact-panel/contact-panel-provider"
 import { ContactPanel } from "@/components/contact-panel/contact-panel"
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 const fontMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -33,14 +33,19 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", inter.variable)}
+      className={cn(
+        "antialiased",
+        fontMono.variable,
+        "font-sans",
+        geist.variable,
+      )}
     >
       <body>
         <ThemeProvider>
           <ContactPanelProvider>
             <SiteHeader />
             <main>{children}</main>
-            <Footer53 />
+            <SiteFooter />
             <ContactPanel />
           </ContactPanelProvider>
         </ThemeProvider>
